@@ -37,6 +37,8 @@ Dpkg::Options {
 };
 EOF
 
+# Enable server restart flag with livepatch enabled
+
 cat <<EOF > /etc/kernel/postinst.d/kernel-livepatch-reboot
 #!/bin/sh
 
@@ -58,17 +60,21 @@ crontab -l | { cat; echo "$((RANDOM % 60)) $((2 + RANDOM % 4)) * * * /bin/sh -c 
 
 # change ssh port
 new_ssh_port=$(shuf -i 1024-65535 -n 1)
+
+echo "NOTE new SSH port: $new_ssh_port"
+read -p "Press Enter to continue"
+
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 sudo sed -i "s/^Port.*/Port $new_ssh_port/" /etc/ssh/sshd_config
 sudo sed -i "s/^\s*#*\s*Port\s*.*/Port $new_ssh_port/" /etc/ssh/sshd_config
-grep Port /etc/ssh/sshd_config
-sudo service ssh restart
+sudo grep Port /etc/ssh/sshd_config
 
-echo "NOTE new SSH port: $new_ssh_port"
-read -p "Press enter to continue"
+read -p "Check that port is valid and press Enter to continue (or Ctrl+C to abort)"
+
+sudo service sshd restart
 
 # Monitoring
-apt install monit
+sudo apt install monit
 
 # Final touches
 sudo dpkg-reconfigure tzdata # adjust timezone
