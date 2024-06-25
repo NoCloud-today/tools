@@ -57,6 +57,7 @@ EOF
 
 # add automatic reboot at the night time
 crontab -l | { cat; echo "$((RANDOM % 60)) $((2 + RANDOM % 4)) * * * /bin/sh -c '[ -f /var/run/reboot-required ] && sudo shutdown -r now'"; } | crontab -
+crontab -l
 
 # change ssh port
 new_ssh_port=$(shuf -i 1024-65535 -n 1)
