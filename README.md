@@ -2,9 +2,8 @@
 
 ## Ubuntu setup script
 ```bash
-wget -O - https://raw.githubusercontent.com/NoCloud-today/tools/main/ubuntu_setup.sh | bash
+wget https://raw.githubusercontent.com/NoCloud-today/tools/main/ubuntu_setup.sh && bash ubuntu_setup.sh
 ```
 
 ## ToDo:
-- fix issue, when `read` is ignored
 - add optional Docker install
