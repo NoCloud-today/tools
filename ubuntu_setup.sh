@@ -53,14 +53,14 @@ crontab -l
 new_ssh_port=$(shuf -i 1025-32875 -n 1)
 
 echo "NOTE new SSH port: $new_ssh_port"
-read -p "Press Enter to continue"
+read -p "Press Enter to continue or Ctrl+C to abort"
 
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 sed -i "s/^Port.*/Port $new_ssh_port/" /etc/ssh/sshd_config
 sed -i "s/^\s*#*\s*Port\s*.*/Port $new_ssh_port/" /etc/ssh/sshd_config
 grep Port /etc/ssh/sshd_config
 
-read -p "Check that port is valid and press Enter to continue (or Ctrl+C to abort)"
+read -p "Verify that port is valid and press Enter"
 
 service sshd restart
 
