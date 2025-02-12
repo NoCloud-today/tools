@@ -16,7 +16,9 @@ swapon /swapfile
 swapon --show
 echo "/swapfile    none    swap    sw    0   0" >> /etc/fstab
 
-sudo dpkg-reconfigure tzdata # adjust timezone
+apt install btop
+echo "btop installed (and glances are not)" # as glances fails on a small servers 
+dpkg-reconfigure tzdata # adjust timezone
 
 # Unattended upgrades
 systemctl enable unattended-upgrades
@@ -44,8 +46,9 @@ Dpkg::Options {
    "--force-confold";
 };
 EOF
+systemctl restart unattended-upgrades
 
-# IPv6 is mostly causing problems, even in 2025 - disable it
+# IPv6 is mostly causing problems
 cat <<EOF >> /etc/sysctl.d/99-no_ipv6.conf
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
