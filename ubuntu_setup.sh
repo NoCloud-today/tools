@@ -16,7 +16,6 @@ swapon /swapfile
 swapon --show
 echo "/swapfile    none    swap    sw    0   0" >> /etc/fstab
 
-apt install btop glances
 echo "alias glances='glances --disable-bg'" >> ~/.bashrc
 dpkg-reconfigure tzdata # adjust timezone
 
@@ -73,5 +72,8 @@ grep Port /etc/ssh/sshd_config
 read -p "Verify that port is valid and press Enter"
 
 service sshd restart
+
+apt update && apt upgrade -y
+apt install btop glances
 
 echo "Done."
