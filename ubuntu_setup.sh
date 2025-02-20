@@ -16,8 +16,8 @@ swapon /swapfile
 swapon --show
 echo "/swapfile    none    swap    sw    0   0" >> /etc/fstab
 
-apt install btop
-echo "btop installed (and glances are not)" # as glances fails on a small servers 
+apt install btop glances
+echo "alias glances='glances --disable-bg'" >> ~/.bashrc
 dpkg-reconfigure tzdata # adjust timezone
 
 # Unattended upgrades
