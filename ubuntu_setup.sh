@@ -4,6 +4,9 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
+# rm marketing
+rm -f /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news
+
 # add swap, ~twice of the size of RAM
 RAM_SIZE=`free -b | awk '/Mem:/ {print $2 / 1024 / 1024 / 1024}'`
 SWAP_SIZE=$(printf "%.0f" $(echo "$RAM_SIZE * 2 + 0.5" | bc))
