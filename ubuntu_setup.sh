@@ -77,6 +77,6 @@ read -p "Verify that port is valid and press Enter"
 service sshd restart
 
 apt update && apt upgrade -y
-apt install -y btop glances
+apt install -y btop glances vim
 
 echo "Done."
