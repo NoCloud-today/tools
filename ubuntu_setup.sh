@@ -4,8 +4,8 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# rm marketing
-rm -f /etc/update-motd.d/10-help-text /etc/update-motd.d/50-motd-news
+# less words
+cd /etc/update-motd.d/ && chmod -x 10-help-text 50-motd-news 91-release-upgrade
 
 # add swap, ~twice of the size of RAM
 RAM_SIZE=`free -b | awk '/Mem:/ {print $2 / 1024 / 1024 / 1024}'`
