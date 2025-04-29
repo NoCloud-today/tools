@@ -26,7 +26,7 @@ dpkg-reconfigure tzdata # adjust timezone
 systemctl enable unattended-upgrades
 apt-config dump APT::Periodic::Unattended-Upgrade # shall be 1
 ls /etc/apt/apt.conf.d/*unattended-upgrades # shall be one file
-cat <<EOF > /etc/apt/apt.conf.d/50unattended-upgrades
+cat <<\EOF > /etc/apt/apt.conf.d/50unattended-upgrades
 Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
         "${distro_id}:${distro_codename}-security";
