@@ -79,4 +79,8 @@ service sshd restart
 apt update && apt upgrade -y
 apt install -y btop glances vim
 
+echo "set ts=4 sw=4" >> ~/.vimrc
+echo "Changing default editor:"
+sudo update-alternatives --config editor
+
 echo "Done."
