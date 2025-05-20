@@ -77,7 +77,7 @@ read -p "Verify that port is valid and press Enter"
 service sshd restart
 
 apt update && apt upgrade -y
-apt install -y btop glances vim
+apt install -y btop glances vim monit
 
 echo "set ts=4 sw=4" >> ~/.vimrc
 echo "Changing default editor:"
