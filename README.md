@@ -12,8 +12,8 @@ wget https://raw.githubusercontent.com/NoCloud-today/tools/main/ubuntu_setup.sh 
 
 ## FreeBSD nicies
 ```bash
-wget https://raw.githubusercontent.com/NoCloud-today/tools/blob/main/check_all_bsd_disks.sh && chmod +x check_all_bsd_disks.sh
-wget https://raw.githubusercontent.com/NoCloud-today/tools/blob/main/check_amd_cpu_backdoor.sh && chmod +x check_amd_cpu_backdoor.sh
+curl -O "https://raw.githubusercontent.com/NoCloud-today/tools/refs/heads/main/check_{all_bsd_disks,amd_cpu_backdoor}.sh" \
+  && chmod +x check_{all_bsd_disks,amd_cpu_backdoor}.sh
 ```
 
 ## ToDo:
