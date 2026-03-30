@@ -7,17 +7,22 @@ fi
 # less words
 cd /etc/update-motd.d/ && chmod -x 10-help-text 50-motd-news 91-release-upgrade
 
-# add swap, ~twice of the size of RAM
-RAM_SIZE=`free -b | awk '/Mem:/ {print $2 / 1024 / 1024 / 1024}'`
-SWAP_SIZE=$(printf "%.0f" $(echo "$RAM_SIZE * 2 + 0.5" | bc))
-swapon --show # status quo
-free --giga -h #shows the RAM
-fallocate -l $SWAP_SIZE."G" /swapfile
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
-swapon --show
-echo "/swapfile    none    swap    sw    0   0" >> /etc/fstab
+[ -n "$(swapon --show)" ] && echo 'Swap exists' || {
+
+    echo 'No swap file detected - adding one'
+    # add swap, ~twice of the size of RAM
+    RAM_SIZE=`free -b | awk '/Mem:/ {print $2 / 1024 / 1024 / 1024}'`
+    SWAP_SIZE=$(printf "%.0f" $(echo "$RAM_SIZE * 2 + 0.5" | bc))
+    swapon --show # status quo
+    free --giga -h #shows the RAM
+    fallocate -l $SWAP_SIZE."G" /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+    swapon --show
+    echo "/swapfile    none    swap    sw    0   0" >> /etc/fstab
+
+}
 
 echo "alias glances='glances --disable-bg'" >> ~/.bashrc
 dpkg-reconfigure tzdata # adjust timezone
@@ -79,7 +84,11 @@ crontab -l
 }
 
 apt update && apt upgrade -y
-apt install -y btop glances vim monit
+apt install -y vim monit
+
+# export OVERRIDE_OBSERVANCE_TOOLS='btop'
+apt install -y ${OVERRIDE_OBSERVANCE_TOOLS:-btop glances}
+
 
 echo "set ts=4 sw=4" >> ~/.vimrc
 echo "Changing default editor:"
