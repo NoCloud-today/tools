@@ -55,12 +55,16 @@ Dpkg::Options {
 EOF
 systemctl restart unattended-upgrades
 
-# IPv6 is mostly causing problems
-cat <<EOF >> /etc/sysctl.d/99-no_ipv6.conf
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-EOF
-service procps force-reload
+[[ " $* " == *" -keep-ipv6 "* ]] && { echo "Leaving IPv6 as is"; } || {
+
+    # IPv6 is mostly causing problems
+    cat <<EOF >> /etc/sysctl.d/99-no_ipv6.conf
+    net.ipv6.conf.all.disable_ipv6 = 1
+    net.ipv6.conf.default.disable_ipv6 = 1
+    EOF
+    service procps force-reload
+
+}
 
 # add automatic reboot at the night time
 crontab -l | { cat; echo "$((RANDOM % 60)) $((2 + RANDOM % 4)) * * * /bin/sh -c '[ -f /var/run/reboot-required ] && sudo shutdown -r now'"; } | crontab -
