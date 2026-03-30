@@ -90,7 +90,7 @@ crontab -l
 apt update && apt upgrade -y
 apt install -y vim monit
 
-# export OVERRIDE_OBSERVANCE_TOOLS='btop'
+# export OVERRIDE_OBSERVANCE_TOOLS='btop htop'
 apt install -y ${OVERRIDE_OBSERVANCE_TOOLS:-btop glances}
 
 
