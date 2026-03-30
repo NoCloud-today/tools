@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # That is all root user operations
 if [ "$(id -u)" -ne 0 ]; then
     echo "This script must be run as root" 1>&2
@@ -8,20 +10,18 @@ fi
 cd /etc/update-motd.d/ && chmod -x 10-help-text 50-motd-news 91-release-upgrade
 
 [ -n "$(swapon --show)" ] && echo 'Swap exists' || {
-
     echo 'No swap file detected - adding one'
     # add swap, ~twice of the size of RAM
     RAM_SIZE=`free -b | awk '/Mem:/ {print $2 / 1024 / 1024 / 1024}'`
     SWAP_SIZE=$(printf "%.0f" $(echo "$RAM_SIZE * 2 + 0.5" | bc))
     swapon --show # status quo
     free --giga -h #shows the RAM
-    fallocate -l $SWAP_SIZE."G" /swapfile
+    fallocate -l "${SWAP_SIZE}G" /swapfile
     chmod 600 /swapfile
     mkswap /swapfile
     swapon /swapfile
     swapon --show
     echo "/swapfile    none    swap    sw    0   0" >> /etc/fstab
-
 }
 
 echo "alias glances='glances --disable-bg'" >> ~/.bashrc
@@ -29,8 +29,7 @@ dpkg-reconfigure tzdata # adjust timezone
 
 # Unattended upgrades
 systemctl enable unattended-upgrades
-apt-config dump APT::Periodic::Unattended-Upgrade # shall be 1
-ls /etc/apt/apt.conf.d/*unattended-upgrades # shall be one file
+
 cat <<\EOF > /etc/apt/apt.conf.d/50unattended-upgrades
 Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
@@ -56,14 +55,11 @@ EOF
 systemctl restart unattended-upgrades
 
 [[ " $* " == *" -keep-ipv6 "* ]] && { echo "Leaving IPv6 as is"; } || {
-
-    # IPv6 is mostly causing problems
-    cat <<EOF >> /etc/sysctl.d/99-no_ipv6.conf
-    net.ipv6.conf.all.disable_ipv6 = 1
-    net.ipv6.conf.default.disable_ipv6 = 1
-    EOF
-    service procps force-reload
-
+cat <<EOF >> /etc/sysctl.d/99-no_ipv6.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+EOF
+service procps force-reload
 }
 
 # add automatic reboot at the night time
